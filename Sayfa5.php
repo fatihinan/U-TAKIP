@@ -3,6 +3,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Untitled Document</title>
 
+
+<script language="javascript" type="text/javascript">
+function ShowDiv() 
+{
+	document.getElementById('div_iletisim').style.display = "block";
+	document.getElementById('lbl_iletisim').innerHTML = '<br />';
+}
+</script>
+
 <style type="text/css">
 
 .divv{
@@ -70,19 +79,7 @@ padding:10px;
 	margin-left:50px;
 }	
 
-.gorunmez
-{
-	display:none;
-}
 </style>
-
-<script type="javascript">
-function ShowDiv() 
-{
-	document.getElementById('div_iletisim').style.display = "block"
-}
-</script>
-
 
 </head>
 
@@ -93,7 +90,7 @@ function ShowDiv()
 
  <a href="?Yardim=1"><img id="btn" src="kullanim_klavuzu.png" width="200" height="44" /></a> <br /> 
  <a href="?Yardim=2"><img id="btn" src="sikca_sorulan_sorular.png" width="233" height="44" /></a>  <br />
- <a href="?Yardim=3"><img id="btn" onClick="ShowDiv()" src="iletisim.png" width="111" height="44" /></a>  <br />
+ <a href="?Yardim=3"><img id="btn" onClick="ShowDiv(); return false;" src="iletisim.png" width="111" height="44" /></a>  <br />
 
 	<?php
 		if (isset($_GET['Yardim'])) 
@@ -124,7 +121,7 @@ function ShowDiv()
 				Yardım Sekmesinde Kullanım Klavuzu, Sıkça Sorulan Sorular ve İletişim kısımları bulunmaktadır.<br />
 				"; break;
 				
-				case '3' : $str_yazi = "İletişim <br />"; 
+				case '3' : $str_yazi = "<br />"; 
 				
 				
 					echo '<script type="text/javascript">ShowDiv()</script>'; 
@@ -151,18 +148,15 @@ function ShowDiv()
 				";
 		}
 	?>
-    <script type="javascript">
-		ShowDiv();
-	</script>
 
         
 <div class="pencere">
-     <label>
+     <label id="lbl_iletisim">
      <?php echo $str_yazi; ?>
      </label>
-     <div id="div_iletisim" class="gorunmez">
-     	<label>E-Mail: </label>  <input class="mail" type="text" name="mail">  <br />  <br />
-        <label style="vertical-align:top">Mesaj : </label>  <textarea name="mesaj" class="mesaj"></textarea><br />
+     <div id="div_iletisim" style="display:none">
+     	<label style="color:#00C">E-Mail: </label>  <input class="mail" type="text" name="mail">  <br />  <br />
+        <label style="vertical-align:top; color:#00C">Mesaj : </label>  <textarea name="mesaj" class="mesaj"></textarea><br />
         <a href="?Yardim=4"><input class="buton" type="submit" name="btn_gonder" value="GÖNDER">   </a>  
      </div>
  </div>
