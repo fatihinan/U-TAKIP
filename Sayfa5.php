@@ -63,13 +63,13 @@ padding:10px;
 
 .mail
 {
-	width:850px; 
+	width:700px; 
 	height:30px;
 }
 
 .mesaj
 {
-	width:850px; 
+	width:700px; 
 	height:100px;
 	resize:none;
 }
@@ -78,6 +78,30 @@ padding:10px;
 {
 	margin-left:50px;
 }	
+
+table.gridtable {
+	width:700px;
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+}
+table.gridtable th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+table.gridtable td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	text-align:center;
+}
 
 </style>
 
@@ -122,18 +146,14 @@ padding:10px;
 				"; break;
 				
 				case '3' : $str_yazi = "<br />"; 
-				
-				
 					echo '<script type="text/javascript">ShowDiv()</script>'; 
-				
-
-						 break;
+					break;
+				case '4' : $str_yazi = "<br />"; 
+					include_once "veritabani.php";
+					MailGonder(); 
+					break;
 						 
 				default: $str_yazi = "Kullanım Klavuzu"; break;
-			}
-			if($Yardim==4)
-			{
-				echo "Burada mail gönderilecek.";
 			}
 		}
 		else
@@ -154,12 +174,33 @@ padding:10px;
      <label id="lbl_iletisim">
      <?php echo $str_yazi; ?>
      </label>
-     <div id="div_iletisim" style="display:none">
-     	<label style="color:#00C">E-Mail: </label>  <input class="mail" type="text" name="mail">  <br />  <br />
-        <label style="vertical-align:top; color:#00C">Mesaj : </label>  <textarea name="mesaj" class="mesaj"></textarea><br />
-        <a href="?Yardim=4"><input class="buton" type="submit" name="btn_gonder" value="GÖNDER">   </a>  
-     </div>
- </div>
+<div id="div_iletisim" style="display:none">
+<form action="masterpage.php?Yardim=4" method="post">
+<table class='gridtable' border="1">
+  <tr>
+    <th scope="row">Ad Soyad</th>
+    <td>:</td>
+    <td><input class="mail" type="text" name="mail_ad_soyad"></td>
+  </tr>
+  <tr>
+    <th scope="row">E Mail Adresi</th>
+    <td>:</td>
+    <td><input class="mail" type="text" name="mail_adresi"></td>
+  </tr>
+  <tr>
+    <th scope="row">Mesaj</th>
+    <td>:</td>
+    <td><textarea name="mail_mesaji" class="mesaj"></textarea></td>
+  </tr>
+  <tr>
+    <th scope="row"><input type="submit" class="buton" name="btn_submit" value="GÖNDER"/></th>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+</form>
+</div>
+</div>
  
  
 </div>

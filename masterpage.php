@@ -39,6 +39,8 @@ background-color:#0099CC;}
 
 </style>
 
+
+
 </head>
 
 <body>
@@ -56,9 +58,27 @@ background-color:#0099CC;}
     
     <div class="icerik">
 		<?php
+		
 		if (isset($_GET['Yardim'])) 
 		{
 			include('Sayfa5.php');
+		}
+		else if (isset($_GET['Yonetici'])) 
+		{
+			$yonetici_islem_id = $_GET['Yonetici'];
+			include_once "veritabani.php";
+			
+			switch($yonetici_islem_id)
+			{
+				case '1' : KullaniciEkle();
+					break;
+				case '2' : KullaniciGuncelle();
+					break;
+				case '3': KullaniciSil();
+					break;
+			}
+
+			include('Sayfa3.php');
 		}
 		else
 		{
