@@ -69,8 +69,8 @@ table.gridtable td {
 	width:1000px;
 }
 </style>
-
-<script language="javascript" type="text/javascript">
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script type="text/javascript">
 var kaynak_secili_mi = 0;
 function myFunction(x) 
 {
@@ -96,9 +96,7 @@ function myFunction(x)
 	elem.value = x.cells[1].innerHTML;
 	var elem = document.getElementById("sil_grup");
 	elem.value = x.cells[2].innerHTML;
-	
 
-	
 	var dd_guncelle = document.getElementById('guncelle_durum');
 	var dd_sil = document.getElementById('sil_durum');
 	var image = x.getElementsByTagName("img");
@@ -137,6 +135,21 @@ function ShowDiv(div_name)
 		}
 	}
 }
+
+function KonumGuncelle()
+{	 
+	$.get("guncel_konum.php", function(data){
+		var array_konumlar = data.split("_");
+		var table = document.getElementById("tablo");
+		for (var i = 1, row; row = table.rows[i]; i++) 
+		{
+			row.cells[3].innerHTML = array_konumlar[i-1];
+		}
+	});
+	setTimeout(KonumGuncelle, 3000);
+}
+
+KonumGuncelle();
 </script>
 
 
@@ -146,7 +159,6 @@ function ShowDiv(div_name)
 
 <div class="bos">
 </div>
-
 
 <div id="div_ana">
 <?php
@@ -159,7 +171,7 @@ function ShowDiv(div_name)
 <a href="?Sayfa=Sayfa3"><img align="right" onClick="ShowDiv('div_ekle'); return false;" style="margin-right:10" id="btn" src="ekle.png" width="75" height="28" /></a>
 </div>
 </div>
-
+ <input type="text" style="visibility:hidden" name="konum_icin_mac" id="konum_icin_mac">
 <div id="div_ekle" style="display:none">
 <form action="masterpage.php?Yonetici=1" method="post">
 <caption>YENİ KULLANICI EKLE</caption>

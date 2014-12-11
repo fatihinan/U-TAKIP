@@ -60,6 +60,19 @@ function KullaniciEkle()
 	
 	$sql = "INSERT INTO guncel_konum (kaynak_id, konum_x, konum_y, konum_kat) VALUES ('$kaynak_id', 0, 0, 0)";
 	$conn->query($sql);
+	
+	$sql = "CREATE TABLE gecmis_konum_" . $kaynak_id . "(
+  `kaynak_id` int(11) DEFAULT NULL,
+  `konum_x` float DEFAULT NULL,
+  `konum_y` float DEFAULT NULL,
+  `konum_kat` int(11) DEFAULT NULL,
+  `zaman` datetime DEFAULT NULL,
+  KEY `fk_kaynak_id_gecmis_konum` (`kaynak_id`),
+  CONSTRAINT `fk_kaynak_id_gecmis_konum` FOREIGN KEY (`kaynak_id`) REFERENCES `kaynak_bilgileri` (`kaynak_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8";
+
+	$conn->query($sql);
+	
 	$conn->close();
 	
 }
@@ -111,6 +124,9 @@ function KullaniciSil()
 	$sql = "DELETE FROM guncel_konum WHERE kaynak_id=$kaynak_id";
 	$conn->query($sql);
 	
+	$sql = "DROP TABLE gecmis_konum_" . $kaynak_id;
+	$conn->query($sql);
+	
 	$sql = "DELETE FROM kaynak_bilgileri WHERE kaynak_id=$kaynak_id";
 	if ($conn->query($sql) === TRUE) 
 	{
@@ -123,6 +139,35 @@ function KullaniciSil()
 	
 	$conn->close();
 }
+
+
+
+function deneme()
+{
+	echo "a_b_c_d_";
+}
+
+function KaynakKonumGetir()
+{
+	$tum_konumlar = "";
+	$servername = "85.159.67.247";
+	$username = "hikmetyucel.net";
+	$password = "Odtu1997";
+	$dbname = "utakip";
+	$conn = new mysqli($servername, $username, $password, $dbname);
+	$conn->set_charset("utf8");
+	$sql = "SELECT konum_x, konum_y, konum_kat FROM guncel_konum";
+	$result = $conn->query($sql);
+	
+	while($row = $result->fetch_assoc()) 
+	{
+		$kaynak_konumu = "X:" . $row['konum_x'] . " Y:" . $row['konum_y'] . " Kat:" . $row['konum_kat'];
+		$tum_konumlar = $tum_konumlar . $kaynak_konumu . "_";
+	}
+	echo $tum_konumlar;
+	$conn->close();
+}
+
 
 function KaynakBilgileriniGetir()
 {
