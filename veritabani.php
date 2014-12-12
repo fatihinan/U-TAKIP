@@ -58,7 +58,7 @@ function KullaniciEkle()
 	$satir = $result->fetch_assoc();
 	$kaynak_id = (int)$satir['kaynak_id'];
 	
-	$sql = "INSERT INTO guncel_konum (kaynak_id, konum_x, konum_y, konum_kat) VALUES ('$kaynak_id', 0, 0, 0)";
+	$sql = "INSERT INTO guncel_konum (kaynak_id, konum_x, konum_y, konum_kat) VALUES ('$kaynak_id', 0, 0, 1)";
 	$conn->query($sql);
 	
 	$sql = "CREATE TABLE gecmis_konum_" . $kaynak_id . "(
@@ -140,12 +140,6 @@ function KullaniciSil()
 	$conn->close();
 }
 
-
-
-function deneme()
-{
-	echo "a_b_c_d_";
-}
 
 function KaynakKonumGetir()
 {

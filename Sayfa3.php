@@ -189,7 +189,14 @@ KonumGuncelle();
   <tr>
     <th scope="row">Grup</th>
     <td>:</td>
-    <td><input type="text" name="ekle_grup"></td>
+    <td><select name="ekle_grup" id="ekle_grup">
+    <option value="Öğrenci">Öğrenci</option>
+    <option value="Öğretmen">Öğretmen</option>
+    <option value="Hizmetli">Hizmetli</option>
+    <option value="Güvenlik">Güvenlik</option>
+    <option value="Araç">Araç</option>
+    <option value="Diğer">Diğer</option>
+    </select></td>
   </tr>
     <tr>
     <th scope="row">Durum</th>
@@ -227,7 +234,14 @@ KonumGuncelle();
   <tr>
     <th scope="row">Grup</th>
     <td>:</td>
-    <td><input type="text" name="guncelle_grup" id="guncelle_grup"></td>
+    <td><select name="guncelle_grup" id="guncelle_grup">
+    <option value="Öğrenci">Öğrenci</option>
+    <option value="Öğretmen">Öğretmen</option>
+    <option value="Hizmetli">Hizmetli</option>
+    <option value="Güvenlik">Güvenlik</option>
+    <option value="Araç">Araç</option>
+    <option value="Diğer">Diğer</option>
+    </select></td>
   </tr>
   <tr>
     <th scope="row">Durum</th>
@@ -264,7 +278,14 @@ KonumGuncelle();
   <tr>
     <th scope="row">Grup</th>
     <td>:</td>
-    <td><input type="text" name="sil_grup" id="sil_grup" readonly></td>
+    <td><select name="sil_grup" id="sil_grup" disabled>
+    <option value="Öğrenci">Öğrenci</option>
+    <option value="Öğretmen">Öğretmen</option>
+    <option value="Hizmetli">Hizmetli</option>
+    <option value="Güvenlik">Güvenlik</option>
+    <option value="Araç">Araç</option>
+    <option value="Diğer">Diğer</option>
+    </select></td>
   </tr>
   <tr>
     <th scope="row">Durum</th>

@@ -82,7 +82,6 @@ html, body, #map-canvas {
     padding: 10px;
   }
 </style>
-</style>
 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
 
@@ -90,6 +89,7 @@ html, body, #map-canvas {
 var overlay;
 var google_maps;
 USGSOverlay.prototype = new google.maps.OverlayView();
+var guncel_kat = 1;
 
 // Initialize the map and the custom overlay.
 
@@ -108,7 +108,19 @@ function initialize() {
   var neBound = new google.maps.LatLng(39.74695525890393, 30.47470408628280);
   var bounds = new google.maps.LatLngBounds(swBound, neBound);
 
-  var srcImage = 'http://www.e-birge.com/img/kroki.png';
+  var srcImage = 'http://www.e-birge.com/img/kroki_1.png';
+  
+  // Create the legend and display on the map
+  var legendDiv = document.createElement('DIV');
+  var legend = new Kat(legendDiv, map);
+  legendDiv.index = 1;
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(legendDiv);
+  
+  // Create the legend and display on the map
+  var legendDiv = document.createElement('DIV');
+  var legend = new Legend(legendDiv, map);
+  legendDiv.index = 1;
+  map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legendDiv);
 
   overlay = new USGSOverlay(bounds, srcImage, map);
 }
@@ -164,6 +176,75 @@ USGSOverlay.prototype.onRemove = function() {
   this.div_ = null;
 };
 
+function Kat(controlDiv, map) {
+  // Set CSS for the control border
+  var controlUI = document.createElement('DIV');
+  controlUI.style.borderStyle = 'none';
+  controlUI.title = 'KAT SEÇİMİ';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control text
+  var controlText = document.createElement('DIV');
+  controlText.style.fontFamily = 'Arial,sans-serif';
+  controlText.style.fontSize = '24px';
+  
+  // Add the text
+  controlText.innerHTML = "<div onmouseover='show()' onmouseout='hide()'> <div id='katlar' style='visibility: hidden'>"+
+"<b style='margin-left:10'>KAT SEÇİMİ</b> <br />" +
+"<a id='btn_guncelle' href='#' onclick='KatSecimi(1)'>KAT 1</a>" + 
+"<a style='margin-left:20' id='btn_guncelle' href='#' onclick='KatSecimi(2)'>KAT 2</a>"+
+"</div></div>";
+  controlUI.appendChild(controlText);
+}
+
+function show() {
+    document.getElementById("katlar").style.visibility = "visible";
+}
+  
+function hide() {
+    document.getElementById("katlar").style.visibility = "hidden";
+}
+
+function KatSecimi(kat)
+{
+	deleteMarkers();
+	var swBound = new google.maps.LatLng(39.74676581119369, 30.47443736263356);
+	var neBound = new google.maps.LatLng(39.74695525890393, 30.47470408628280);
+	var bounds = new google.maps.LatLngBounds(swBound, neBound);
+	var srcImage = 'http://www.e-birge.com/img/kroki_' + kat + '.png';
+	overlay = new USGSOverlay(bounds, srcImage, google_maps);
+	guncel_kat = kat;
+}
+
+function Legend(controlDiv, map) {
+  controlDiv.style.padding = '5px';
+  controlDiv.style.backgroundColor = "White";
+
+  // Set CSS for the control border
+  var controlUI = document.createElement('DIV');
+  controlUI.style.borderStyle = 'solid';
+  controlUI.style.borderWidth = '1px';
+  controlUI.title = 'GRUPLAR';
+  controlDiv.appendChild(controlUI);
+
+  // Set CSS for the control text
+  var controlText = document.createElement('DIV');
+  controlText.style.fontFamily = 'Arial,sans-serif';
+  controlText.style.fontSize = '20px';
+  controlText.style.paddingLeft = '4px';
+  controlText.style.paddingRight = '4px';
+  
+  // Add the text
+  controlText.innerHTML = '<b style="margin-left:15">GRUPLAR</b><br />' +
+        '<img src="http://maps.google.com/mapfiles/ms/micons/red-dot.png" /> Öğrenci<br />' +
+        '<img src="http://maps.google.com/mapfiles/ms/micons/yellow-dot.png" /> Öğretmen<br />' +
+        '<img src="http://maps.google.com/mapfiles/ms/micons/green-dot.png" /> Hizmetli<br />' +
+        '<img src="http://maps.google.com/mapfiles/ms/micons/blue-dot.png" /> Güvenlik<br />' +
+        '<img src="http://maps.google.com/mapfiles/ms/micons/purple-dot.png" /> Araç<br />' +
+		'<img src="http://maps.google.com/mapfiles/ms/micons/orange-dot.png" /> Diğer<br />';
+  controlUI.appendChild(controlText);
+}
+
 google.maps.event.addDomListener(window, 'load', initialize);
 
 </script>
@@ -195,7 +276,15 @@ function Guncelle()
 	{
 		if(markers[i].getTitle()==kullanici_ismi_eski)
 		{
-			markers[i].setTitle(kullanici_ismi);
+		  markers[i].setTitle(kullanici_ismi);
+		  var icon_color;
+		  if(grup=="Öğrenci") icon_color = "red-dot.png"; 
+		  else if (grup=="Öğretmen") icon_color = "yellow-dot.png"; 
+		  else if (grup=="Hizmetli") icon_color = "green-dot.png";
+		  else if (grup=="Güvenlik") icon_color = "blue-dot.png"; 
+		  else if (grup=="Araç") icon_color = "purple-dot.png";
+		  else icon_color = "orange-dot.png";
+		  markers[i].setIcon("http://maps.google.com/mapfiles/ms/icons/"+icon_color);
 		  google.maps.event.addListener(markers[i], 'click', function() {
 		  
 		  var select_durum;
@@ -208,6 +297,62 @@ function Guncelle()
 		  {
 			  select_durum = "<option value='Pasif'>Pasif</option>"+
 							"<option value='Aktif'>Aktif</option>"
+		  }
+		  
+		  var select_grup;
+		  if(grup=="Öğrenci")
+		  {
+			  select_grup="<option value='Öğrenci'>Öğrenci</option>"+
+			 "<option value='Öğretmen'>Öğretmen</option>"+
+			 "<option value='Hizmetli'>Hizmetli</option>"+
+			 "<option value='Güvenlik'>Güvenlik</option>"+
+			 "<option value='Araç'>Araç</option>"+
+			 "<option value='Diğer'>Diğer</option>";
+		  }
+		  else if(grup=="Öğretmen")
+		  {
+			  select_grup="<option value='Öğretmen'>Öğretmen</option>"+
+			 "<option value='Öğrenci'>Öğrenci</option>"+
+			 "<option value='Hizmetli'>Hizmetli</option>"+
+			 "<option value='Güvenlik'>Güvenlik</option>"+
+			 "<option value='Araç'>Araç</option>"+
+			 "<option value='Diğer'>Diğer</option>";
+		  }
+		  else if(grup=="Hizmetli")
+		  {
+			  select_grup="<option value='Hizmetli'>Hizmetli</option>"+
+			 "<option value='Öğretmen'>Öğretmen</option>"+
+			 "<option value='Öğrenci'>Öğrenci</option>"+
+			 "<option value='Güvenlik'>Güvenlik</option>"+
+			 "<option value='Araç'>Araç</option>"+
+			 "<option value='Diğer'>Diğer</option>";
+		  }
+		  else if(grup=="Güvenlik")
+		  {
+			  select_grup="<option value='Güvenlik'>Güvenlik</option>"+
+			  "<option value='Hizmetli'>Hizmetli</option>"+
+			 "<option value='Öğretmen'>Öğretmen</option>"+
+			 "<option value='Öğrenci'>Öğrenci</option>"+
+			 "<option value='Araç'>Araç</option>"+
+			 "<option value='Diğer'>Diğer</option>";
+		  }
+		  else if(grup=="Araç")
+		  {
+			  select_grup="<option value='Araç'>Araç</option>"+
+			  "<option value='Güvenlik'>Güvenlik</option>"+
+			  "<option value='Hizmetli'>Hizmetli</option>"+
+			 "<option value='Öğretmen'>Öğretmen</option>"+
+			 "<option value='Öğrenci'>Öğrenci</option>"+
+			 "<option value='Diğer'>Diğer</option>";
+		  }
+		  else
+		  {
+			  select_grup="<option value='Diğer'>Diğer</option>"+
+			  "<option value='Güvenlik'>Güvenlik</option>"+
+			  "<option value='Hizmetli'>Hizmetli</option>"+
+			 "<option value='Öğretmen'>Öğretmen</option>"+
+			 "<option value='Öğrenci'>Öğrenci</option>"+
+			 "<option value='Araç'>Araç</option>";
 		  }
 		  
 		  var contentString = "<div id='div_guncelle'>"+
@@ -226,7 +371,9 @@ function Guncelle()
 		"  <tr>"+
 		"    <th scope='row'>Grup</th>"+
 		"    <td>:</td>"+
-		"    <td><input type='text' value='"+ grup +"' name='guncelle_grup' id='guncelle_grup'></td>"+
+		"    <td><select name='guncelle_grup' id='guncelle_grup'>"+
+		select_grup+
+		"</select></td>"+
 		"  </tr>"+
 		"  <tr>"+
 		"    <th scope='row'>Durum</th>"+
@@ -252,6 +399,29 @@ function Guncelle()
 	
 }
 
+// Sets the map on all markers in the array.
+function setAllMap(g_map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(g_map);
+  }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setAllMap(null);
+}
+
+// Shows any markers currently in the array.
+function showMarkers() {
+  setAllMap(map);
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+  clearMarkers();
+  markers = [];
+}
+
 var markers = [];
 
 function MarkerEkle(lat, lon, kullanici_adi, i, mac, grup, durum)
@@ -261,16 +431,27 @@ function MarkerEkle(lat, lon, kullanici_adi, i, mac, grup, durum)
   if(i<markers.length)
   {
 	  markers[i].setPosition(myLatlng);
-	  markers[i].setTitle(str);
+	  markers[i].setTitle(kullanici_adi);
   }
   else
   {
+	  var icon_color;
+	  if(grup=="Öğrenci") icon_color = "red-dot.png"; 
+	  else if (grup=="Öğretmen") icon_color = "yellow-dot.png"; 
+	  else if (grup=="Hizmetli") icon_color = "green-dot.png";
+	  else if (grup=="Güvenlik") icon_color = "blue-dot.png"; 
+	  else if (grup=="Araç") icon_color = "purple-dot.png";
+	  else icon_color = "orange-dot.png";
+	  
+	  
 	  var marker = new google.maps.Marker({
 		  position: myLatlng,
 		  map: google_maps,
+		  icon: "http://maps.google.com/mapfiles/ms/icons/" + icon_color,
 		  animation: google.maps.Animation.DROP,
 		  title: kullanici_adi
 	  });
+	  
 	  google.maps.event.addListener(marker, 'click', function() {
 		  
 		  var select_durum;
@@ -283,6 +464,62 @@ function MarkerEkle(lat, lon, kullanici_adi, i, mac, grup, durum)
 		  {
 			  select_durum = "<option value='Pasif'>Pasif</option>"+
 							"<option value='Aktif'>Aktif</option>"
+		  }
+		  
+		  var select_grup;
+		  if(grup=="Öğrenci")
+		  {
+			  select_grup="<option value='Öğrenci'>Öğrenci</option>"+
+			 "<option value='Öğretmen'>Öğretmen</option>"+
+			 "<option value='Hizmetli'>Hizmetli</option>"+
+			 "<option value='Güvenlik'>Güvenlik</option>"+
+			 "<option value='Araç'>Araç</option>"+
+			 "<option value='Diğer'>Diğer</option>";
+		  }
+		  else if(grup=="Öğretmen")
+		  {
+			  select_grup="<option value='Öğretmen'>Öğretmen</option>"+
+			 "<option value='Öğrenci'>Öğrenci</option>"+
+			 "<option value='Hizmetli'>Hizmetli</option>"+
+			 "<option value='Güvenlik'>Güvenlik</option>"+
+			 "<option value='Araç'>Araç</option>"+
+			 "<option value='Diğer'>Diğer</option>";
+		  }
+		  else if(grup=="Hizmetli")
+		  {
+			  select_grup="<option value='Hizmetli'>Hizmetli</option>"+
+			 "<option value='Öğretmen'>Öğretmen</option>"+
+			 "<option value='Öğrenci'>Öğrenci</option>"+
+			 "<option value='Güvenlik'>Güvenlik</option>"+
+			 "<option value='Araç'>Araç</option>"+
+			 "<option value='Diğer'>Diğer</option>";
+		  }
+		  else if(grup=="Güvenlik")
+		  {
+			  select_grup="<option value='Güvenlik'>Güvenlik</option>"+
+			  "<option value='Hizmetli'>Hizmetli</option>"+
+			 "<option value='Öğretmen'>Öğretmen</option>"+
+			 "<option value='Öğrenci'>Öğrenci</option>"+
+			 "<option value='Araç'>Araç</option>"+
+			 "<option value='Diğer'>Diğer</option>";
+		  }
+		  else if(grup=="Araç")
+		  {
+			  select_grup="<option value='Araç'>Araç</option>"+
+			  "<option value='Güvenlik'>Güvenlik</option>"+
+			  "<option value='Hizmetli'>Hizmetli</option>"+
+			 "<option value='Öğretmen'>Öğretmen</option>"+
+			 "<option value='Öğrenci'>Öğrenci</option>"+
+			 "<option value='Diğer'>Diğer</option>";
+		  }
+		  else
+		  {
+			  select_grup="<option value='Diğer'>Diğer</option>"+
+			  "<option value='Güvenlik'>Güvenlik</option>"+
+			  "<option value='Hizmetli'>Hizmetli</option>"+
+			 "<option value='Öğretmen'>Öğretmen</option>"+
+			 "<option value='Öğrenci'>Öğrenci</option>"+
+			 "<option value='Araç'>Araç</option>";
 		  }
 		  
 		  var contentString = "<div id='div_guncelle'>"+
@@ -301,7 +538,9 @@ function MarkerEkle(lat, lon, kullanici_adi, i, mac, grup, durum)
 		"  <tr>"+
 		"    <th scope='row'>Grup</th>"+
 		"    <td>:</td>"+
-		"    <td><input type='text' value='"+ grup +"' name='guncelle_grup' id='guncelle_grup'></td>"+
+		"    <td><select name='guncelle_grup' id='guncelle_grup'>"+
+    	select_grup+
+    	"	</select></td>"+
 		"  </tr>"+
 		"  <tr>"+
 		"    <th scope='row'>Durum</th>"+
@@ -322,9 +561,12 @@ function MarkerEkle(lat, lon, kullanici_adi, i, mac, grup, durum)
 		infowindow.setContent(contentString);
 		infowindow.open(google_maps,marker);
 	  });
-	  markers.push(marker);
+	  
+	 markers.push(marker);
   }
 }
+
+
 var infowindow = new google.maps.InfoWindow();
 
 function KonumGuncelle()
@@ -333,12 +575,13 @@ function KonumGuncelle()
 		var array_konumlar = data.split("_");
 		var str;
 		var index;
-		
-		for(index=0; index<array_konumlar.length-1; index++)
+		var sayac = 0;
+		for(index=0; index<array_konumlar.length; index++)
 		{
 			var array_kullanici_konum = array_konumlar[index].split("/");
 			var konum_x = array_kullanici_konum[0];
 			var konum_y = array_kullanici_konum[1];
+			var konum_kat = array_kullanici_konum[2];
 			var kaynak_isim = array_kullanici_konum[3];
 			var kaynak_durum = array_kullanici_konum[4];
 			var mac = array_kullanici_konum[5];
@@ -347,13 +590,17 @@ function KonumGuncelle()
 			
 			var d_lat = 39.74676581119369 + ((konum_y * 0.00017444771024)/19.4);
 			var d_lon = 30.47443736263356 + ((konum_x * 0.00026672364924)/22.8);
+
 			
-			MarkerEkle(d_lat, d_lon, kaynak_isim, index, mac, grup, durum);
+			if(konum_kat == guncel_kat && durum=="Aktif")
+			{
+				MarkerEkle(d_lat, d_lon, kaynak_isim, sayac, mac, grup, durum);
+				++sayac;
+			}
 		}
-		setTimeout(KonumGuncelle, 3000);
+		setTimeout(KonumGuncelle, 2500);
 	});
 }
-
 
 KonumGuncelle();
 
