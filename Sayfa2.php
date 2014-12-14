@@ -17,7 +17,7 @@ border-color:#00C;
 border-radius:15px;
 margin:10px;
 margin-top:0px;
-padding:10px;
+padding:10px;alert
 }
 
 .pencere{
@@ -84,6 +84,7 @@ html, body, #map-canvas {
 </style>
 
 <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 
 <script>
 var overlay;
@@ -110,19 +111,19 @@ function initialize() {
 
   var srcImage = 'http://www.e-birge.com/img/kroki_1.png';
   
-  // Create the legend and display on the map
   var legendDiv = document.createElement('DIV');
   var legend = new Kat(legendDiv, map);
   legendDiv.index = 1;
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(legendDiv);
   
-  // Create the legend and display on the map
-  var legendDiv = document.createElement('DIV');
-  var legend = new Legend(legendDiv, map);
-  legendDiv.index = 1;
-  map.controls[google.maps.ControlPosition.RIGHT_TOP].push(legendDiv);
-
-  overlay = new USGSOverlay(bounds, srcImage, map);
+ // Create the legend and display on the map
+		  var legendDiv = document.createElement('DIV');
+		  var legend = new Legend(legendDiv, map);
+		  legendDiv.index = 1;
+		  google_maps.controls[google.maps.ControlPosition.RIGHT_TOP].push(legendDiv);
+		
+		  overlay = new USGSOverlay(bounds, srcImage, google_maps);
+  
 }
 
 function USGSOverlay(bounds, image, map) {
@@ -222,8 +223,7 @@ function Legend(controlDiv, map) {
 
   // Set CSS for the control border
   var controlUI = document.createElement('DIV');
-  controlUI.style.borderStyle = 'solid';
-  controlUI.style.borderWidth = '1px';
+  controlUI.style.borderStyle = 'none';
   controlUI.title = 'GRUPLAR';
   controlDiv.appendChild(controlUI);
 
@@ -233,26 +233,65 @@ function Legend(controlDiv, map) {
   controlText.style.fontSize = '20px';
   controlText.style.paddingLeft = '4px';
   controlText.style.paddingRight = '4px';
-  
-  // Add the text
-  controlText.innerHTML = '<b style="margin-left:15">GRUPLAR</b><br />' +
-        '<img src="http://maps.google.com/mapfiles/ms/micons/red-dot.png" /> Öğrenci<br />' +
-        '<img src="http://maps.google.com/mapfiles/ms/micons/yellow-dot.png" /> Öğretmen<br />' +
-        '<img src="http://maps.google.com/mapfiles/ms/micons/green-dot.png" /> Hizmetli<br />' +
-        '<img src="http://maps.google.com/mapfiles/ms/micons/blue-dot.png" /> Güvenlik<br />' +
-        '<img src="http://maps.google.com/mapfiles/ms/micons/purple-dot.png" /> Araç<br />' +
-		'<img src="http://maps.google.com/mapfiles/ms/micons/orange-dot.png" /> Diğer<br />';
-  controlUI.appendChild(controlText);
+
+		controlText.innerHTML = "<select onchange='GrupSecimi()' name='guncelle_grup' id='guncelle_grup'>"+
+			"<option selected='true' style='display:none;'>Grup Seçiniz</option>"+
+  			"<option value='Öğrenci'>Öğrenci</option>"+
+			 "<option value='Öğretmen'>Öğretmen</option>"+
+			 "<option value='Hizmetli'>Hizmetli</option>"+
+			 "<option value='Güvenlik'>Güvenlik</option>"+
+			 "<option value='Araç'>Araç</option>"+
+			 "<option value='Diğer'>Diğer</option>"+
+			 "</select> <br /><br />" + 
+			 "<select onchange='KaynakSecimi()' name='guncelle_kaynak' id='guncelle_kaynak'>"+
+			 "<option selected='true' style='display:none;'>Kullanıcı Seçiniz</option>"+
+			 "</select>";
+ 		 controlUI.appendChild(controlText);
 }
 
+function KaynakSecimi()
+{
+	var dd_kaynak = document.getElementById('guncelle_kaynak');
+	var kaynak_id = dd_kaynak.value;
+	KonumGetir(kaynak_id);
+}
+
+
+function GrupSecimi()
+{
+	document.getElementById("guncelle_kaynak").options.length = 0;
+	var dd_guncelle = document.getElementById('guncelle_grup');
+	var grup_adi = dd_guncelle.value;
+	
+	var option = document.createElement("option");
+	option.text = "Kullanıcı Seçiniz";
+	option.value = "Kullanıcı Seçiniz";
+	option.selected = true;
+	option.style = "display:none;";
+	var select = document.getElementById("guncelle_kaynak");
+	select.appendChild(option);
+	
+	 $.post("analiz_kullanici_bilgilerini_getir.php", {grup: grup_adi}).done(function(data){
+		var array_konumlar = data.split("_");
+		var index;
+		for(index=0; index<array_konumlar.length-1; index++)
+		{
+			var array_kullanici_konum = array_konumlar[index].split("/");
+			var kaynak_id = array_kullanici_konum[0];
+			var kaynak_ismi = array_kullanici_konum[1];	
+			
+			var option = document.createElement("option");
+			option.text = kaynak_ismi;
+			option.value = kaynak_id;
+			var select = document.getElementById("guncelle_kaynak");
+			select.appendChild(option);
+		}
+		});
+}
+
+
+
 google.maps.event.addDomListener(window, 'load', initialize);
-
-</script>
-
-<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-
-<script type="text/javascript">
-
 
 
 // Sets the map on all markers in the array.
@@ -287,7 +326,7 @@ function MarkerEkle(lat, lon, zaman)
 	  var marker = new google.maps.Marker({
 		  position: myLatlng,
 		  map: google_maps,
-		  icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+		  icon: "http://www.e-birge.com/img/marker.png",
 		  animation: google.maps.Animation.DROP,
 		  title: zaman
 	  });
@@ -299,37 +338,16 @@ function MarkerEkle(lat, lon, zaman)
 	  });
 	  
 	 markers.push(marker);
-
 }
+
 var infowindow = new google.maps.InfoWindow();
 
-function KullaniciBilgileriniGetir()
-{	
-alert("a");
-	$.post("analiz_kullanici_bilgilerini_getir.php", function(data){
-		alert(data);
-		/*var array_konumlar = data.split("_");
-		var index;
-		for(index=0; index<array_konumlar.length; index++)
-		{
-			var array_kullanici_konum = array_konumlar[index].split("/");
-			var konum_x = array_kullanici_konum[0];
-			var konum_y = array_kullanici_konum[1];
-			var konum_kat = array_kullanici_konum[2];
-			var zaman = array_kullanici_konum[3];
-			var d_lat = 39.74676581119369 + ((konum_y * 0.00017444771024)/19.4);
-			var d_lon = 30.47443736263356 + ((konum_x * 0.00026672364924)/22.8);
 
-			MarkerEkle(d_lat, d_lon, zaman);
-			
-		}*/
-	});
-}
-
-function KonumGuncelle()
+function KonumGetir(id)
 {	
-	$.post("gecmis_konum_kaynak_bilgileri.php", { kullanici_id: '3'}).done(function(data){
-		alert(data);
+	deleteMarkers();
+	$.post("gecmis_konum_kaynak_bilgileri.php", { kullanici_id: id}).done(function(data){
+
 		var array_konumlar = data.split("_");
 		var index;
 		for(index=0; index<array_konumlar.length; index++)
@@ -343,12 +361,10 @@ function KonumGuncelle()
 			var d_lon = 30.47443736263356 + ((konum_x * 0.00026672364924)/22.8);
 
 			MarkerEkle(d_lat, d_lon, zaman);
-			
 		}
 	});
 }
-KullaniciBilgileriniGetir();
-//KonumGuncelle();
+//KonumGetir(3);
 </script>
 
 
