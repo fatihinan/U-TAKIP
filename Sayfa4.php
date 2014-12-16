@@ -43,10 +43,20 @@ text-align:center
 <div class="bos">
 </div>
 <div class="lbl">
-<label>Günümüzde çok katlı, karmaşık ve geniş alanlara yayılmış kapalı mekanların sayısı gittikçe artmaktadır. Alışveriş merkezleri, hastaneler, havaalanları, kapalı otoparklar bu mekanlara örnek olarak gösterilebilir. İnsanlar vakitlerinin %80-90'ını bu mekanlarda geçirmektedirler. Bu nedenle iç ortamlarda konum tabanlı takip sistemleri önemli bir yere gelmiştir. Ülkemizde iç ortamlarda konumlandırma ve takip sağlayan sistem ve servisler bulunmamaktadır. İç Ortamlarda Uzaktan Takip Amaçlı Konumlandırma Sistemi(U-TAKİP) sistemi ile bu açığın kapatılması hedeflenmektedir. Ortama kurulacak algılayıcı ağı ile geometrik yöntemler kullanılarak merkezi sunucu üzerinden metre hassasiyetinde uzaktan takip (kişi/nesne) sistemi geliştirilecektir. <br />
-Uygulamanın kullanım alanları; personel takibi, hasta takibi, çocuk takibi, lojistik takibi olarak belirlenmiştir. Gerçekleştirilecek olan U-TAKİP sistemi ile kullanıcı, sunucu yazılımı tarafından personellerin konumunu takip edebilecektir. Bir ortama müşteri geldiğinde kullanıcı en yakın personeli müşteriye yönlendirerek daha hızlı bir hizmet sağlayabilecektir. Bu sayede hem hizmet kalitesi artacak hem de iş gücünden ve zamandan tasarruf sağlanacaktır. Aynı zamanda hastanelerde hastaların konumunun bilinmesi ve takibi çalışma verimini arttıracak bir bilgidir. Hasta takibi sistemi ile hastaya takılacak olan bir BLE etiket bulunduran bileklik ile hastanın konumu bulunabilecektir. Bu sayede doktor veya hemşire bir hastaya ulaşmak istediğinde vakit kaybetmeden ulaşabilecektir. Diğer bir yönüyle tekerlekli sandalye, sedye gibi donanımlara takılacak BLE etiketleri ile ekipman ve boş veya dolu araç takibi de yapılabilecektir. U-TAKİP sistemi ile lojistik hizmetleri sağlayan şirketlerin lojistik merkezleri için ürünlerin/kargoların konumlarının bilinmesi önemli bir ihtiyaçtır. Tasarlanan sistem büyük bir alana sahip lojistik merkezlerinde aranan ürün/kargoların hızlı bir şekilde bulunması için kullanılabilir nitelikte olacak ve esnek üretim ve dağıtıma olanak tanıyacaktır. Bu sayede ürün/kargonun konumunu bilmeyen bir personel bile kısa sürede istediği hedefe ulaşabilecektir.<br />
-U-TAKİP projesi TÜBİTAK 2241-A SANAYİ ODAKLI LİSANS BİTİRME TEZİ DESTEKLEME PROGRAMI tarafından desteklenmektedir.
-</label>
+<p><font size="6"><b>Eskişehir Osmangazi Üniversitesi</b></font></p>
+<p>
+İÇ ORTAMLARDA UZAKTAN TAKİP AMAÇLI KONUMLANDIRMA SİSTEMİ (U-TAKİP), Eskişehir Osmangazi Üniversitesi, Mühendislik Mimarlık Fakültesi, Bilgisayar Mühendisliği öğrencileri tarafından bitirme projesi olarak gerçekleştirilmiştir. Projenin akademik danışmanı Yrd. Doc. Dr. Ahmet YAZICI'dır.
+</p>
+
+<p><font size="6"><b>TÜBİTAK</b></font></p>
+<p>
+İÇ ORTAMLARDA UZAKTAN TAKİP AMAÇLI KONUMLANDIRMA SİSTEMİ (U-TAKİP), 2241-A Sanayi Odaklı Lisans Bitirme Tezi Destekleme Programına yapılan 7. dönem başvurusu sonucu destek almaya hak kazanmıştır. 
+</p>
+
+<p><font size="6"><b>İnovasyon Mühendislik</b></font></p>
+<p>
+İÇ ORTAMLARDA UZAKTAN TAKİP AMAÇLI KONUMLANDIRMA SİSTEMİ (U-TAKİP) İnovasyon Münendislik danışmanlığı altında gerçekleştirilmiştir. İnovasyon Mühendislik, 2010 yılında Teknogirişim desteği ile kurulmuş bir firmadır. Firma ATAP çatısı altında Eskişehir Osmangazi Üniversitesi Teknoparkında faaliyetlerini sürdürmektedir. Projenin sektör danışmanı Yüksek Müh. Uğur YAYAN'dır.
+</p>
 </div>
 
 </div>
